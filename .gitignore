@@ -1,0 +1,54 @@
+# -- Dependencies --
+node_modules/
+.pnpm-store/
+
+# -- Build Output --
+.next/
+out/
+build/
+dist/
+*.tsbuildinfo
+next-env.d.ts
+
+# -- Testing --
+coverage/
+playwright-report/
+test-results/
+blob-report/
+playwright/.cache/
+
+# -- Environment & Secrets --
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# -- Logs --
+logs/
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# -- Docker / Local Data --
+docker-data/
+*.dump
+*.sql.gz
+
+# -- IDE --
+.idea/
+.vscode/*
+!.vscode/extensions.json
+*.iml
+*.iws
+*.ipr
+
+# -- OS --
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# -- Deployment --
+.vercel/
