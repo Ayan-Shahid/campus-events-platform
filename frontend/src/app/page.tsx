@@ -1,11 +1,33 @@
+'use client';
+
+import { useState } from 'react';
 import ThemeToggle from '@/components/layout/theme-toggle';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Field, FieldLabel, FieldDescription, FieldError } from '@/components/ui/field';
-import { Mail, CheckCircle2 } from 'lucide-react';
+import { Checkbox } from '@/components/ui/checkbox';
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import {
+  Field,
+  FieldLabel,
+  FieldDescription,
+  FieldError,
+  FieldGroup,
+  FieldSet,
+  FieldLegend,
+} from '@/components/ui/field';
+import { Mail, CheckCircle2, User, Lock, Eye, EyeOff } from 'lucide-react';
 
 export default function Home() {
+  const [showPassword, setShowPassword] = useState(false);
+
   const swatches = [
     { name: 'background', class: 'bg-background text-foreground border border-border' },
     { name: 'card', class: 'bg-card text-card-foreground border border-border' },
@@ -97,7 +119,49 @@ export default function Home() {
           </h2>
 
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-            {/* 1. Default State */}
+            {/* 1. Username Input (with aria-hidden leading icon) */}
+            <Field>
+              <FieldLabel htmlFor="username">Username</FieldLabel>
+              <div className="relative flex items-center">
+                <User
+                  aria-hidden="true"
+                  className="pointer-events-none absolute left-3.5 z-10 size-4 text-muted-foreground"
+                />
+                <Input id="username" type="text" placeholder="ayan_shahid" className="pl-10" />
+              </div>
+              <FieldDescription>
+                Choose a unique handle for your organizer profile.
+              </FieldDescription>
+            </Field>
+
+            {/* 2. Password Input (with password toggle button using aria-label and aria-pressed) */}
+            <Field>
+              <FieldLabel htmlFor="password">Password</FieldLabel>
+              <div className="relative flex items-center">
+                <Lock
+                  aria-hidden="true"
+                  className="pointer-events-none absolute left-3.5 z-10 size-4 text-muted-foreground"
+                />
+                <Input
+                  id="password"
+                  type={showPassword ? 'text' : 'password'}
+                  defaultValue="SecretPass123!"
+                  className="pr-10 pl-10"
+                />
+                <button
+                  type="button"
+                  aria-label={showPassword ? 'Hide password' : 'Show password'}
+                  aria-pressed={showPassword}
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3.5 z-10 rounded text-muted-foreground hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+                >
+                  {showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+                </button>
+              </div>
+              <FieldDescription>Must be at least 8 characters long.</FieldDescription>
+            </Field>
+
+            {/* 3. Default State */}
             <Field>
               <FieldLabel htmlFor="event-name">
                 Event Name <span className="text-primary">*</span>
@@ -108,14 +172,19 @@ export default function Home() {
               </FieldDescription>
             </Field>
 
-            {/* 2. Icon Prefixed Input */}
+            {/* 4. Icon Prefixed Input */}
             <Field>
               <FieldLabel htmlFor="organizer-email">Organizer Email</FieldLabel>
               <div className="relative flex items-center">
-                <Mail className="pointer-events-none absolute left-3.5 z-10 size-4 text-muted-foreground" />
+                <Mail
+                  aria-hidden="true"
+                  className="pointer-events-none absolute left-3.5 z-10 size-4 text-muted-foreground"
+                />
                 <Input
                   id="organizer-email"
                   type="email"
+                  required
+                  minLength={10}
                   defaultValue="ayan.shahid@university.edu"
                   className="pl-10"
                 />
@@ -125,7 +194,37 @@ export default function Home() {
               </FieldDescription>
             </Field>
 
-            {/* 3. Invalid / Error State */}
+            {/* 5. Input with Trailing Unit ("seats") */}
+            <Field>
+              <FieldLabel htmlFor="seat-allocation">Seat Allocation</FieldLabel>
+              <div className="relative flex items-center">
+                <Input id="seat-allocation" type="number" defaultValue={120} className="pr-16" />
+                <span className="pointer-events-none absolute right-3.5 font-mono text-xs text-muted-foreground">
+                  seats
+                </span>
+              </div>
+              <FieldDescription>Maximum occupancy limit for the venue.</FieldDescription>
+            </Field>
+
+            {/* 6. Select Demo */}
+            <Field>
+              <FieldLabel htmlFor="event-category">Event Category</FieldLabel>
+              <Select defaultValue="tech">
+                <SelectTrigger id="event-category" className="h-12 w-full">
+                  <SelectValue placeholder="Select category..." />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectItem value="tech">Technology & AI</SelectItem>
+                    <SelectItem value="business">Entrepreneurship</SelectItem>
+                    <SelectItem value="arts">Culture & Arts</SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+              <FieldDescription>Select the primary domain of the event.</FieldDescription>
+            </Field>
+
+            {/* 7. Invalid / Error State */}
             <Field data-invalid="true">
               <FieldLabel htmlFor="max-attendees">Maximum Attendees</FieldLabel>
               <Input id="max-attendees" type="number" defaultValue={-5} aria-invalid="true" />
@@ -134,7 +233,7 @@ export default function Home() {
               />
             </Field>
 
-            {/* 4. Disabled State */}
+            {/* 8. Disabled State */}
             <Field>
               <FieldLabel htmlFor="venue-location" className="opacity-60">
                 Venue Location (Locked)
@@ -151,15 +250,55 @@ export default function Home() {
             </Field>
           </div>
 
-          {/* 5. Textarea Demo */}
+          {/* 9. Checkbox Demo */}
+          <Field orientation="horizontal" className="items-center pt-2">
+            <Checkbox id="terms-agreement" aria-invalid={true} />
+            <FieldLabel
+              htmlFor="terms-agreement"
+              className="cursor-pointer font-sans text-sm font-normal"
+            >
+              I agree to the university campus hosting guidelines and safety policies.
+            </FieldLabel>
+          </Field>
+
+          {/* 10. Textarea Demo */}
           <Field className="pt-2">
             <FieldLabel htmlFor="event-description">Event Description & Guidelines</FieldLabel>
             <Textarea
               id="event-description"
               placeholder="Provide a detailed summary of what attendees can expect..."
+              aria-invalid={false}
             />
             <FieldDescription className="text-right">Maximum 500 characters</FieldDescription>
           </Field>
+        </section>
+
+        {/* FieldSet & FieldGroup Component Demos */}
+        <section
+          className="flex flex-col gap-6 rounded-[20px] border border-border bg-card p-6"
+          style={{ boxShadow: 'var(--shadow-card)' }}
+        >
+          <h2 className="font-mono text-sm tracking-wider text-muted-foreground uppercase">
+            FieldSet & FieldGroup Compositions
+          </h2>
+
+          <FieldSet>
+            <FieldLegend variant="legend">Event Logistics Configuration</FieldLegend>
+            <FieldGroup>
+              <Field>
+                <FieldLabel htmlFor="group-venue">Venue Identifier</FieldLabel>
+                <Input id="group-venue" placeholder="e.g. Hall-B" />
+                <FieldDescription>
+                  Assigned automatically based on campus schedules.
+                </FieldDescription>
+              </Field>
+
+              <Field>
+                <FieldLabel htmlFor="group-capacity">Seating Limit</FieldLabel>
+                <Input id="group-capacity" type="number" placeholder="150" />
+              </Field>
+            </FieldGroup>
+          </FieldSet>
         </section>
 
         {/* Status Banners & Errors */}

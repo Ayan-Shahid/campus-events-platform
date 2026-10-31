@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Bricolage_Grotesque, IBM_Plex_Sans, IBM_Plex_Mono } from 'next/font/google';
 import './globals.css';
 import ThemeProvider from '@/app/providers/theme-provider';
+import type { ReactNode } from 'react';
 
 const bricolageGrotesque = Bricolage_Grotesque({
   variable: '--font-display',
@@ -28,7 +29,7 @@ export const metadata: Metadata = {
   description: 'Discover, book and manage campus events effortlessly',
 };
 
-export default function RootLayout({ children }: LayoutProps<'/'>) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html
       lang="en"
