@@ -1,4 +1,9 @@
 import ThemeToggle from '@/components/layout/theme-toggle';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Field, FieldLabel, FieldDescription, FieldError } from '@/components/ui/field';
+import { Mail, CheckCircle2 } from 'lucide-react';
 
 export default function Home() {
   const swatches = [
@@ -24,7 +29,10 @@ export default function Home() {
       class: 'bg-destructive-subtle text-destructive border border-destructive-border',
     },
     { name: 'info', class: 'bg-info text-background' },
-    { name: 'info-subtle', class: 'bg-info-subtle text-info border border-info-border' },
+    {
+      name: 'info-subtle',
+      class: 'bg-info-subtle text-info border border-info-border',
+    },
   ];
 
   return (
@@ -70,11 +78,88 @@ export default function Home() {
           <h2 className="font-mono text-sm tracking-wider text-muted-foreground uppercase">
             Mesh-Ember Primary Button
           </h2>
-          <div className="flex items-center gap-4">
-            <button className="rounded-[12px] bg-mesh-primary px-6 py-3 font-sans text-sm font-medium text-primary-foreground transition-transform hover:scale-[1.02] active:scale-[0.98]">
-              Book Campus Event
-            </button>
+          <div className="flex flex-wrap items-center gap-4">
+            <Button>Book Campus Event</Button>
+            <Button variant="outline">Book Campus Event</Button>
+            <Button variant="ghost">Cancel</Button>
+            <Button variant="destructive">Cancel Booking</Button>
+            <Button loading>Processing</Button>
           </div>
+        </section>
+
+        {/* Form Fields & Inputs Demo Section */}
+        <section
+          className="flex flex-col gap-6 rounded-[20px] border border-border bg-card p-6"
+          style={{ boxShadow: 'var(--shadow-card)' }}
+        >
+          <h2 className="font-mono text-sm tracking-wider text-muted-foreground uppercase">
+            Form Fields & Input States
+          </h2>
+
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+            {/* 1. Default State */}
+            <Field>
+              <FieldLabel htmlFor="event-name">
+                Event Name <span className="text-primary">*</span>
+              </FieldLabel>
+              <Input id="event-name" type="text" placeholder="e.g. AI & Web3 Hackathon" />
+              <FieldDescription>
+                Provide a clear and concise title for the campus event.
+              </FieldDescription>
+            </Field>
+
+            {/* 2. Icon Prefixed Input */}
+            <Field>
+              <FieldLabel htmlFor="organizer-email">Organizer Email</FieldLabel>
+              <div className="relative flex items-center">
+                <Mail className="pointer-events-none absolute left-3.5 z-10 size-4 text-muted-foreground" />
+                <Input
+                  id="organizer-email"
+                  type="email"
+                  defaultValue="ayan.shahid@university.edu"
+                  className="pl-10"
+                />
+              </div>
+              <FieldDescription className="flex items-center gap-1 text-success">
+                <CheckCircle2 className="size-3.5" /> Verified university domain credentials
+              </FieldDescription>
+            </Field>
+
+            {/* 3. Invalid / Error State */}
+            <Field data-invalid="true">
+              <FieldLabel htmlFor="max-attendees">Maximum Attendees</FieldLabel>
+              <Input id="max-attendees" type="number" defaultValue={-5} aria-invalid="true" />
+              <FieldError
+                errors={[{ message: 'Capacity must be a positive integer greater than zero.' }]}
+              />
+            </Field>
+
+            {/* 4. Disabled State */}
+            <Field>
+              <FieldLabel htmlFor="venue-location" className="opacity-60">
+                Venue Location (Locked)
+              </FieldLabel>
+              <Input
+                id="venue-location"
+                type="text"
+                disabled
+                value="I-11/2 Auditorium, Islamabad"
+              />
+              <FieldDescription className="opacity-60">
+                Managed centrally by university administration.
+              </FieldDescription>
+            </Field>
+          </div>
+
+          {/* 5. Textarea Demo */}
+          <Field className="pt-2">
+            <FieldLabel htmlFor="event-description">Event Description & Guidelines</FieldLabel>
+            <Textarea
+              id="event-description"
+              placeholder="Provide a detailed summary of what attendees can expect..."
+            />
+            <FieldDescription className="text-right">Maximum 500 characters</FieldDescription>
+          </Field>
         </section>
 
         {/* Status Banners & Errors */}

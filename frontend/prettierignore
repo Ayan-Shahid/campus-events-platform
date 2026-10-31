@@ -4,4 +4,3 @@ playwright-report
 test-results
 pnpm-lock.yaml
 npm-lock.yaml
-src/components/ui

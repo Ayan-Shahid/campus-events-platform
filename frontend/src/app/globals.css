@@ -13,6 +13,7 @@
   --color-popover-foreground: var(--popover-foreground);
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
+  --color-primary-subtle: var(--primary-subtle);
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
   --color-muted: var(--muted);
@@ -33,6 +34,7 @@
   --color-destructive: var(--destructive);
   --color-destructive-subtle: var(--destructive-subtle);
   --color-destructive-border: var(--destructive-border);
+  --color-destructive-text: var(--destructive-text);
 
   --color-info: var(--info);
   --color-info-subtle: var(--info-subtle);
@@ -80,6 +82,7 @@
 
   --primary: #c2410c;
   --primary-foreground: #ffffff;
+  --primary-subtle: #ffd2b0;
   --secondary: #e5e7eb;
   --secondary-foreground: #12141f;
 
@@ -102,6 +105,7 @@
   --destructive: #be123c;
   --destructive-subtle: rgba(190, 18, 60, 0.1);
   --destructive-border: rgba(190, 18, 60, 0.4);
+  --destructive-text: #ffc2ca;
 
   --info: #1d4ed8;
   --info-subtle: rgba(29, 78, 216, 0.1);
@@ -132,6 +136,7 @@
   --popover-foreground: #eef0f8;
 
   --primary: #ff9152;
+  --primary-subtle: #ffd2b0;
   --primary-foreground: #1c0b07;
   --secondary: #1e2538;
   --secondary-foreground: #eef0f8;
@@ -155,6 +160,7 @@
   --destructive: #ff7385;
   --destructive-subtle: rgba(255, 115, 133, 0.12);
   --destructive-border: rgba(255, 115, 133, 0.45);
+  --destructive-text: #ffc2ca;
 
   --info: #86a9ff;
   --info-subtle: rgba(134, 169, 255, 0.12);
@@ -208,11 +214,10 @@
 }
 
 @utility bg-mesh-primary {
-  background-image: url('/public/textures/mesh-ember.webp');
+  background-image: url('/textures/mesh-ember.webp');
   background-size: cover;
   background-position: center;
   background-color: var(--primary);
-  border: 1px solid var(--background);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.45),
     /* Bright inner top rim */ inset 0 -1px 0 rgba(0, 0, 0, 0.15),
