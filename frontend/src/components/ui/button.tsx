@@ -22,10 +22,10 @@ const buttonVariants = cva(
       },
       size: {
         default:
-          'h-[44px] rounded-[min(var(--radius-md),12px)] gap-1.5 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2',
-        xs: "h-6 gap-1 rounded-[min(var(--radius-md),10px)] px-2 text-xs in-data-[slot=button-group]:rounded-lg has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&_svg:not([class*='size-'])]:size-3",
-        sm: "h-[36px] gap-1 rounded-[min(var(--radius-md),12px)] px-2.5 text-[0.8rem] in-data-[slot=button-group]:rounded-lg has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&_svg:not([class*='size-'])]:size-3.5",
-        lg: 'h-[52px] gap-1.5 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2',
+          "h-[44px] rounded-[min(var(--radius-md),12px)] gap-2.5 px-3.5 [&_svg:not([class*='size-'])]:size-3.5",
+        xs: "h-6 gap-1.5 rounded-[min(var(--radius-sm),8px)] px-2 text-[10px] in-data-[slot=button-group]:rounded-lg [&_svg:not([class*='size-'])]:size-2.5",
+        sm: "h-[36px] gap-2 rounded-[min(var(--radius-sm),10px)] px-2.5 text-[0.8rem] in-data-[slot=button-group]:rounded-lg [&_svg:not([class*='size-'])]:size-3",
+        lg: 'h-[52px] gap-3 px-4 py-2 text-lg rounded-[min(var(--radius-lg),14px)]',
         icon: 'size-[44px]',
         'icon-xs':
           "size-6 rounded-[min(var(--radius-md),10px)] in-data-[slot=button-group]:rounded-lg [&_svg:not([class*='size-'])]:size-3",
@@ -62,8 +62,8 @@ function Button({
       className={cn(buttonVariants({ variant, size, className }))}
       {...props}
     >
-      {loading && <Loader2 className="size-4 shrink-0 animate-spin" />}
-      <span className={cn(loading && 'inline-flex items-center gap-2')}>{children}</span>
+      {loading && <Loader2 className="shrink-0 animate-spin" />}
+      {children}
     </ButtonPrimitive>
   );
 }

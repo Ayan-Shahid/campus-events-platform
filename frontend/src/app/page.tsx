@@ -27,8 +27,29 @@ import {
   FieldLegend,
 } from '@/components/ui/field';
 import { FilterChip, RemovableChip } from '@/components/ui/filter-chip';
-import { Mail, CheckCircle2, User, Lock, Eye, EyeOff, Sparkles, Wifi } from 'lucide-react';
+import {
+  Mail,
+  CheckCircle2,
+  User,
+  Lock,
+  Eye,
+  EyeOff,
+  Sparkles,
+  Wifi,
+  CalendarX2,
+  RotateCw,
+} from 'lucide-react';
 import Meter from '@/components/ui/meter';
+import Banner from '@/components/feedback/banner';
+import QueryError from '@/components/feedback/query-error';
+import EmptyState from '@/components/feedback/empty-state';
+import {
+  EventCardSkeleton,
+  TableRowSkeleton,
+  KPITileSkeleton,
+} from '@/components/feedback/skeleton-presets';
+import { toast } from 'sonner';
+import { announce } from '@/lib/a11y/announcer';
 
 export default function Home() {
   const [showPassword, setShowPassword] = useState(false);
@@ -106,11 +127,176 @@ export default function Home() {
             Mesh-Ember Primary Button
           </h2>
           <div className="flex flex-wrap items-center gap-4">
-            <Button>Book Campus Event</Button>
+            <Button>
+              <span>Book Campus Event</span>
+              <RotateCw />
+            </Button>
             <Button variant="outline">Book Campus Event</Button>
             <Button variant="ghost">Cancel</Button>
             <Button variant="destructive">Cancel Booking</Button>
             <Button loading>Processing</Button>
+          </div>
+        </section>
+
+        {/* Feedback Banners & Query Error Section */}
+        <section
+          className="flex flex-col gap-6 rounded-[20px] border border-border bg-card p-6"
+          style={{ boxShadow: 'var(--shadow-card)' }}
+        >
+          <div className="flex flex-col gap-1">
+            <h2 className="font-mono text-sm tracking-wider text-muted-foreground uppercase">
+              Banners (Feedback)
+            </h2>
+            <p className="font-mono text-xs text-muted-foreground">
+              info / success / warning → role=&quot;status&quot; · error → role=&quot;alert&quot;
+            </p>
+          </div>
+
+          <div className="flex flex-col gap-3">
+            <Banner
+              variant="info"
+              title="Free cancellation"
+              description=" until Thu 12 Nov, 18:30."
+            />
+            <Banner
+              variant="success"
+              title="You're registered."
+              description="A confirmation was sent to your university email."
+              onDismiss={() => announce('Registration banner dismissed')}
+            />
+            <Banner
+              variant="warning"
+              title="Seat counts may be out of date."
+              description="Showing numbers from 18:31."
+              action={
+                <Button size="sm" variant="outline">
+                  <RotateCw className="size-3.5" />
+                  <span className="text-foreground">Retry</span>
+                </Button>
+              }
+            />
+            <Banner
+              variant="error"
+              title="We couldn't sign you in."
+              description="Fix the 2 highlighted fields and try again."
+            />
+          </div>
+
+          <div className="flex flex-col gap-3 pt-2">
+            <h3 className="font-mono text-xs tracking-wider text-muted-foreground uppercase">
+              QueryError (Any Failed Query)
+            </h3>
+            <QueryError
+              title="Couldn't load events."
+              description="Check your connection and try again."
+              onRetry={async () => {
+                await new Promise((resolve) => setTimeout(resolve, 1500));
+                announce('Events reloaded successfully.');
+              }}
+            />
+          </div>
+        </section>
+
+        {/* Sonner Toasts Confirmation Section */}
+        <section
+          className="flex flex-col gap-4 rounded-[20px] border border-border bg-card p-6"
+          style={{ boxShadow: 'var(--shadow-card)' }}
+        >
+          <div className="flex flex-col gap-1">
+            <h2 className="font-mono text-sm tracking-wider text-muted-foreground uppercase">
+              Toaster Confirmations (Sonner)
+            </h2>
+            <p className="font-mono text-xs text-muted-foreground">
+              bottom-right desktop · top on mobile · confirmations only (never errors)
+            </p>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-3">
+            <Button
+              variant="outline"
+              onClick={() => {
+                toast('Cancelled Photography Walk.', {
+                  description: 'Your seat went to the waitlist.',
+                  icon: <CheckCircle2 className="size-4 text-success" />,
+                });
+                announce('Cancelled Photography Walk. Your seat went to the waitlist.');
+              }}
+            >
+              Toast · Success
+            </Button>
+
+            <Button
+              variant="outline"
+              onClick={() => {
+                toast('Event saved as draft.', {
+                  action: {
+                    label: 'Undo',
+                    onClick: () => {
+                      announce('Draft restoration undone.');
+                    },
+                  },
+                  icon: <CheckCircle2 className="size-4 text-success" />,
+                });
+                announce('Event saved as draft.');
+              }}
+            >
+              Toast · With Action
+            </Button>
+          </div>
+        </section>
+
+        {/* Empty State Component Section */}
+        <section
+          className="flex flex-col gap-4 rounded-[20px] border border-border bg-card p-6"
+          style={{ boxShadow: 'var(--shadow-card)' }}
+        >
+          <h2 className="font-mono text-sm tracking-wider text-muted-foreground uppercase">
+            Empty State
+          </h2>
+          <EmptyState
+            icon={CalendarX2}
+            heading="No upcoming campus events"
+            headingLevel="h3"
+            description="You haven't registered for any sessions this week. Explore the catalog to discover upcoming hackathons and career fairs."
+            actions={<Button size="sm">Browse Campus Catalog</Button>}
+          />
+        </section>
+
+        {/* Skeleton Presets Section */}
+        <section
+          className="flex flex-col gap-6 rounded-[20px] border border-border bg-card p-6"
+          style={{ boxShadow: 'var(--shadow-card)' }}
+        >
+          <div className="flex flex-col gap-1">
+            <h2 className="font-mono text-sm tracking-wider text-muted-foreground uppercase">
+              Skeleton Presets (aria-busy)
+            </h2>
+            <p className="font-mono text-xs text-muted-foreground">
+              Presets for KPI Tile, Event Card, and Data Table Rows
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <KPITileSkeleton />
+            <EventCardSkeleton />
+          </div>
+
+          <div className="overflow-hidden rounded-xl border border-border">
+            <table aria-busy="true" className="w-full border-collapse text-left text-sm">
+              <thead>
+                <tr className="border-b border-border bg-muted/40 font-mono text-xs text-muted-foreground uppercase">
+                  <th className="p-4">Event ID</th>
+                  <th className="p-4">Title</th>
+                  <th className="p-4">Occupancy</th>
+                  <th className="p-4">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <TableRowSkeleton columns={4} />
+                <TableRowSkeleton columns={4} />
+                <TableRowSkeleton columns={4} />
+              </tbody>
+            </table>
           </div>
         </section>
 
@@ -128,12 +314,6 @@ export default function Home() {
             <Badge variant="outline">Outline</Badge>
             <Badge variant="destructive">Destructive</Badge>
             <Badge variant="ghost">Ghost</Badge>
-            <Badge variant="info">Info</Badge>
-            <Badge variant="warning">Warning</Badge>
-            <Badge variant="success">Success</Badge>
-            <Badge variant="neutral">Neutral</Badge>
-            <Badge variant="draft">Draft</Badge>
-
             <Badge variant="default" className="gap-1">
               <Sparkles className="size-3" /> Featured
             </Badge>
@@ -232,7 +412,7 @@ export default function Home() {
                 segmented · password strength 1 of 4
               </span>
               <Meter
-                value={45}
+                value={25}
                 max={100}
                 segmented
                 segmentsCount={4}
