@@ -26,9 +26,11 @@
   --color-success: var(--success);
   --color-success-subtle: var(--success-subtle);
   --color-success-border: var(--success-border);
+  --color-success-foreground: var(--success-foreground);
 
   --color-warning: var(--warning);
   --color-warning-subtle: var(--warning-subtle);
+  --color-warning-foreground: var(--warning-foreground);
   --color-warning-border: var(--warning-border);
 
   --color-destructive: var(--destructive);
@@ -39,6 +41,7 @@
   --color-info: var(--info);
   --color-info-subtle: var(--info-subtle);
   --color-info-border: var(--info-border);
+  --color-info-foreground: var(--info-foreground);
 
   --color-border: var(--border);
   --color-border-strong: var(--border-strong);
@@ -97,10 +100,12 @@
   --success: #15803d;
   --success-subtle: rgba(21, 128, 61, 0.1);
   --success-border: rgba(21, 128, 61, 0.4);
+  --success-foreground: #8eebc0;
 
   --warning: #a16207;
   --warning-subtle: rgba(161, 98, 7, 0.1);
   --warning-border: rgba(161, 98, 7, 0.4);
+  --warning-foreground: #fbd58c;
 
   --destructive: #be123c;
   --destructive-subtle: rgba(190, 18, 60, 0.1);
@@ -110,6 +115,7 @@
   --info: #1d4ed8;
   --info-subtle: rgba(29, 78, 216, 0.1);
   --info-border: rgba(29, 78, 216, 0.4);
+  --info-foreground: #baccff;
 
   --border: rgba(18, 20, 31, 0.1);
   --border-strong: rgba(18, 20, 31, 0.18);
@@ -152,10 +158,12 @@
   --success: #4fd99a;
   --success-subtle: rgba(79, 217, 154, 0.12);
   --success-border: rgba(79, 217, 154, 0.45);
+  --success-foreground: #8eebc0;
 
   --warning: #f6c15a;
   --warning-subtle: rgba(246, 193, 90, 0.12);
   --warning-border: rgba(246, 193, 90, 0.45);
+  --warning-foreground: #fbd58c;
 
   --destructive: #ff7385;
   --destructive-subtle: rgba(255, 115, 133, 0.12);
@@ -165,6 +173,7 @@
   --info: #86a9ff;
   --info-subtle: rgba(134, 169, 255, 0.12);
   --info-border: rgba(134, 169, 255, 0.45);
+  --info-foreground: #baccff;
 
   --border: rgba(255, 255, 255, 0.09);
   --border-strong: rgba(255, 255, 255, 0.16);
@@ -222,4 +231,25 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.45),
     /* Bright inner top rim */ inset 0 -1px 0 rgba(0, 0, 0, 0.15),
     /* Subtle inner bottom shadow */ 0 10px 25px -5px rgba(255, 145, 82, 0.3); /* Soft ambient glow matching the ember theme */
+}
+
+@utility bg-gradient-meter-default {
+  background: linear-gradient(
+    90deg,
+    var(--warning) 0%,
+    var(--primary) 50%,
+    var(--destructive) 100%
+  );
+}
+
+@utility bg-gradient-meter-success {
+  background: linear-gradient(90deg, var(--success) 0%, var(--success-foreground) 100%);
+}
+
+@utility bg-gradient-meter-danger {
+  background: linear-gradient(
+    90deg,
+    var(--destructive) 0%,
+    color-mix(in srgb, var(--destructive) 90%, white) 100%
+  );
 }

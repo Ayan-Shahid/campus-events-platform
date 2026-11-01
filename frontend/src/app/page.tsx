@@ -6,6 +6,9 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
+import { Badge } from '@/components/ui/badge';
+import { Progress, ProgressLabel, ProgressValue } from '@/components/ui/progress';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import {
   Select,
   SelectContent,
@@ -23,7 +26,9 @@ import {
   FieldSet,
   FieldLegend,
 } from '@/components/ui/field';
-import { Mail, CheckCircle2, User, Lock, Eye, EyeOff } from 'lucide-react';
+import { FilterChip, RemovableChip } from '@/components/ui/filter-chip';
+import { Mail, CheckCircle2, User, Lock, Eye, EyeOff, Sparkles, Wifi } from 'lucide-react';
+import Meter from '@/components/ui/meter';
 
 export default function Home() {
   const [showPassword, setShowPassword] = useState(false);
@@ -107,6 +112,168 @@ export default function Home() {
             <Button variant="destructive">Cancel Booking</Button>
             <Button loading>Processing</Button>
           </div>
+        </section>
+
+        {/* Badges Demo Section */}
+        <section
+          className="flex flex-col gap-4 rounded-[20px] border border-border bg-card p-6"
+          style={{ boxShadow: 'var(--shadow-card)' }}
+        >
+          <h2 className="font-mono text-sm tracking-wider text-muted-foreground uppercase">
+            Badge Variants
+          </h2>
+          <div className="flex flex-wrap items-center gap-3">
+            <Badge variant="default">Default</Badge>
+            <Badge variant="secondary">Secondary</Badge>
+            <Badge variant="outline">Outline</Badge>
+            <Badge variant="destructive">Destructive</Badge>
+            <Badge variant="ghost">Ghost</Badge>
+            <Badge variant="info">Info</Badge>
+            <Badge variant="warning">Warning</Badge>
+            <Badge variant="success">Success</Badge>
+            <Badge variant="neutral">Neutral</Badge>
+            <Badge variant="draft">Draft</Badge>
+
+            <Badge variant="default" className="gap-1">
+              <Sparkles className="size-3" /> Featured
+            </Badge>
+          </div>
+        </section>
+
+        {/* Filter Chips & Removable Chips Section */}
+        <section
+          className="flex flex-col gap-6 rounded-[20px] border border-border bg-card p-6"
+          style={{ boxShadow: 'var(--shadow-card)' }}
+        >
+          {/* Filter Chips (aria-pressed) */}
+          <div className="flex flex-col gap-3">
+            <h2 className="font-mono text-sm tracking-wider text-muted-foreground uppercase">
+              Filter Chips (aria-pressed)
+            </h2>
+            <div className="flex flex-wrap items-center gap-2.5">
+              <FilterChip defaultChecked>All</FilterChip>
+              <FilterChip>Workshops</FilterChip>
+              <FilterChip>Careers</FilterChip>
+              <FilterChip>
+                <Wifi className="size-4" />
+                Online
+              </FilterChip>
+            </div>
+            <p className="font-mono text-xs text-muted-foreground">on · off · focus · with icon</p>
+          </div>
+
+          {/* Removable Chips */}
+          <div className="flex flex-col gap-3">
+            <h2 className="font-mono text-sm tracking-wider text-muted-foreground uppercase">
+              Removable Chip
+            </h2>
+            <div className="flex flex-wrap items-center gap-2.5">
+              <RemovableChip>After 5 pm</RemovableChip>
+              <RemovableChip>City Centre</RemovableChip>
+            </div>
+          </div>
+        </section>
+
+        {/* Progress Bars Demo Section */}
+        <section
+          className="flex flex-col gap-5 rounded-[20px] border border-border bg-card p-6"
+          style={{ boxShadow: 'var(--shadow-card)' }}
+        >
+          <h2 className="font-mono text-sm tracking-wider text-muted-foreground uppercase">
+            Progress Indicators
+          </h2>
+
+          <div className="flex flex-col gap-4">
+            <Progress value={75}>
+              <div className="flex w-full items-center">
+                <ProgressLabel>Seat Allocation Capacity</ProgressLabel>
+                <ProgressValue />
+              </div>
+            </Progress>
+
+            <Progress value={30}>
+              <div className="flex w-full items-center">
+                <ProgressLabel>Early Bird Registration Limit</ProgressLabel>
+                <ProgressValue />
+              </div>
+            </Progress>
+          </div>
+          <div className="flex flex-col gap-6 rounded-[20px] border border-border bg-card p-6">
+            {/* 1. Default Tone */}
+            <div className="flex flex-col gap-2">
+              <span className="text-sm font-medium text-muted-foreground">
+                tone=&quot;default&quot; · 90%
+              </span>
+              <Meter value={54} max={60} tone="default" label="54 of 60 seats taken" />
+              <span className="text-xs text-muted-foreground">
+                aria-valuetext=&quot;54 of 60 seats taken&quot;
+              </span>
+            </div>
+
+            {/* 2. Success Tone */}
+            <div className="flex flex-col gap-2">
+              <span className="text-sm font-medium text-muted-foreground">
+                tone=&quot;success&quot; · 48%
+              </span>
+              <Meter value={38} max={80} tone="success" label="38 of 80 spots remaining" />
+            </div>
+
+            {/* 3. Danger Tone */}
+            <div className="flex flex-col gap-2">
+              <span className="text-sm font-medium text-muted-foreground">
+                tone=&quot;danger&quot; · full
+              </span>
+              <Meter value={120} max={120} tone="danger" label="120 of 120 capacity reached" />
+            </div>
+
+            {/* 4. Segmented Password Strength */}
+            <div className="flex flex-col gap-2">
+              <span className="text-sm font-medium text-muted-foreground">
+                segmented · password strength 1 of 4
+              </span>
+              <Meter
+                value={45}
+                max={100}
+                segmented
+                segmentsCount={4}
+                tone="danger"
+                label="Password strength 1 of 4"
+              />
+            </div>
+
+            <p className="pt-2 text-xs text-muted-foreground">
+              SeatMeter (capacity + waitlist logic) lives in features/events, not here.
+            </p>
+          </div>
+        </section>
+
+        {/* Tabs Demo Section */}
+        <section
+          className="flex flex-col gap-4 rounded-[20px] border border-border bg-card p-6"
+          style={{ boxShadow: 'var(--shadow-card)' }}
+        >
+          <h2 className="font-mono text-sm tracking-wider text-muted-foreground uppercase">
+            Navigation Tabs
+          </h2>
+
+          <Tabs defaultValue="upcoming" className="w-full">
+            <TabsList variant="line">
+              <TabsTrigger value="upcoming">Upcoming Events</TabsTrigger>
+              <TabsTrigger value="registered">My Registrations</TabsTrigger>
+              <TabsTrigger value="archived">Archived</TabsTrigger>
+            </TabsList>
+            <div className="mt-4 pt-2">
+              <TabsContent value="upcoming" className="text-muted-foreground">
+                Displaying active events scheduled for the upcoming campus semester.
+              </TabsContent>
+              <TabsContent value="registered" className="text-muted-foreground">
+                You are currently registered for 2 tech workshops and 1 hackathon.
+              </TabsContent>
+              <TabsContent value="archived" className="text-muted-foreground">
+                No archived events found from previous semesters.
+              </TabsContent>
+            </div>
+          </Tabs>
         </section>
 
         {/* Form Fields & Inputs Demo Section */}
