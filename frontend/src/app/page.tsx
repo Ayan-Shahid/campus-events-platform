@@ -38,6 +38,11 @@ import {
   Wifi,
   CalendarX2,
   RotateCw,
+  Pencil,
+  Download,
+  QrCode,
+  X,
+  MoreHorizontal,
 } from 'lucide-react';
 import Meter from '@/components/ui/meter';
 import Banner from '@/components/feedback/banner';
@@ -48,6 +53,43 @@ import {
   TableRowSkeleton,
   KPITileSkeleton,
 } from '@/components/feedback/skeleton-presets';
+import { SurfaceCard } from '@/components/visual/surface-card';
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableCaption,
+  TableEmptyRow,
+} from '@/components/ui/table';
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+} from '@/components/ui/dropdown-menu';
+import {
+  Dialog,
+  DialogTrigger,
+  DialogClose,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from '@/components/ui/dialog';
+import {
+  Sheet,
+  SheetTrigger,
+  SheetClose,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetDescription,
+} from '@/components/ui/sheet';
 import { toast } from 'sonner';
 import { announce } from '@/lib/a11y/announcer';
 
@@ -88,7 +130,7 @@ export default function Home() {
       {/* Top Bar with Theme Toggle */}
       <div className="flex w-full max-w-4xl items-center justify-between border-b border-border pb-4">
         <div>
-          <h1 className="font-display text-xl font-bold">Theme & Token Preview</h1>
+          <h1 className="font-display text-xl font-bold">Theme &amp; Token Preview</h1>
           <p className="font-sans text-sm text-muted-foreground">
             Night Commute Design System Verification
           </p>
@@ -138,7 +180,367 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Feedback Banners & Query Error Section */}
+        {/* SurfaceCard & Event Card States Section[cite: 4] */}
+        <section
+          className="flex flex-col gap-6 rounded-[20px] border border-border bg-card p-6"
+          style={{ boxShadow: 'var(--shadow-card)' }}
+        >
+          <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
+            <h2 className="font-mono text-sm tracking-wider text-muted-foreground uppercase">
+              SurfaceCard &amp; Event Card States
+            </h2>
+            <span className="font-mono text-xs text-muted-foreground">
+              visual/surface-card · features/events/components/event-card
+            </span>
+          </div>
+
+          {/* Surface Spec Indicators */}
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+            <SurfaceCard surface="shader" className="p-4">
+              <span className="font-mono text-xs font-semibold text-foreground">
+                surface=&quot;shader&quot;
+              </span>
+              <p className="mt-1 font-mono text-[11px] text-muted-foreground">
+                canvas layer aria-hidden · pointer-events-none
+              </p>
+            </SurfaceCard>
+
+            <SurfaceCard surface="plain" className="p-4">
+              <span className="font-mono text-xs font-semibold text-foreground">
+                surface=&quot;plain&quot;
+              </span>
+              <p className="mt-1 font-mono text-[11px] text-muted-foreground">
+                also the no-WebGL fallback
+              </p>
+            </SurfaceCard>
+
+            <SurfaceCard surface="plain" className="p-4">
+              <a
+                href="#focus-demo"
+                onClick={(e) => e.preventDefault()}
+                className="flex flex-col outline-none"
+              >
+                <span className="font-mono text-xs font-semibold text-foreground">
+                  focus-within
+                </span>
+                <p className="mt-1 font-mono text-[11px] text-muted-foreground">
+                  tab here — ring appears when anything inside has focus
+                </p>
+              </a>
+            </SurfaceCard>
+          </div>
+
+          {/* 3 Event Card States */}
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+            {/* State 1: Open / Few Seats */}
+            <SurfaceCard surface="shader" as="article" className="p-4">
+              <div className="mb-12 inline-flex w-fit flex-col items-center rounded-sm border border-border-strong bg-background/80 px-2.5 py-1.5 font-mono text-xs backdrop-blur-sm">
+                <span className="font-display text-base font-black text-foreground">13</span>
+                <span className="text-[10px] font-bold text-primary-subtle uppercase">FRI</span>
+              </div>
+              <div className="flex flex-col gap-3">
+                <Badge variant="warning" className="w-fit">
+                  • 6 of 60 seats left
+                </Badge>
+                <h3 className="font-display text-base font-bold">Data Viz Night</h3>
+                <Meter value={54} max={60} tone="default" label="54 of 60 seats taken" />
+                <div className="mt-1 flex items-center gap-2">
+                  <Button size="sm" className="flex-1">
+                    Register
+                  </Button>
+                  <Button size="sm" variant="outline">
+                    Details
+                  </Button>
+                </div>
+                <span className="font-mono text-[11px] text-muted-foreground">
+                  open / few seats
+                </span>
+              </div>
+            </SurfaceCard>
+
+            {/* State 2: Full -> Waitlist */}
+            <SurfaceCard
+              surface="shader"
+              as="article"
+              shaderGraphic={
+                <div className="h-36 w-full bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-warning/40 via-destructive/30 to-transparent opacity-90 blur-xl" />
+              }
+              className="p-4"
+            >
+              <div className="mb-12 inline-flex w-fit flex-col items-center rounded-lg bg-background/80 px-2.5 py-1 font-mono text-xs backdrop-blur-sm">
+                <span className="font-bold text-foreground">15</span>
+                <span className="text-[10px] text-muted-foreground uppercase">SUN</span>
+              </div>
+              <div className="flex flex-col gap-3">
+                <Badge variant="destructive" className="w-fit">
+                  • Full · 12 waitlisted
+                </Badge>
+                <h3 className="font-display text-base font-bold">Weekend Hackathon</h3>
+                <Meter value={120} max={120} tone="danger" label="120 of 120 capacity reached" />
+                <div className="mt-1">
+                  <Button size="sm" variant="outline" className="w-full">
+                    Join waitlist
+                  </Button>
+                </div>
+                <span className="font-mono text-[11px] text-muted-foreground">full → waitlist</span>
+              </div>
+            </SurfaceCard>
+
+            {/* State 3: Closed / Disabled */}
+            <SurfaceCard surface="plain" as="article" className="p-4">
+              <div className="mb-12 inline-flex w-fit flex-col items-center rounded-lg border border-border bg-muted/40 px-2.5 py-1 font-mono text-xs">
+                <span className="font-bold text-foreground">21</span>
+                <span className="text-[10px] text-muted-foreground uppercase">SAT</span>
+              </div>
+              <div className="flex flex-col gap-3">
+                <Badge variant="secondary" className="w-fit">
+                  • Registration closed
+                </Badge>
+                <h3 className="font-display text-base font-bold">Commuter Society Mixer</h3>
+                <Meter value={30} max={60} tone="default" label="Registration closed" />
+                <div className="mt-1">
+                  <Button size="sm" variant="outline" disabled className="w-full">
+                    Cut-off passed
+                  </Button>
+                </div>
+                <span className="font-mono text-[11px] text-muted-foreground">
+                  closed · disabled + reason text
+                </span>
+              </div>
+            </SurfaceCard>
+          </div>
+        </section>
+
+        {/* Table & Dropdown Menu Section[cite: 4] */}
+        <section
+          className="flex flex-col gap-6 rounded-[20px] border border-border bg-card p-6"
+          style={{ boxShadow: 'var(--shadow-card)' }}
+        >
+          <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
+            <h2 className="font-mono text-sm tracking-wider text-muted-foreground uppercase">
+              Table &amp; Dropdown Menu
+            </h2>
+            <span className="font-mono text-xs text-muted-foreground">
+              ui/table (overflow-x box) · ui/dropdown-menu (row actions)
+            </span>
+          </div>
+
+          <p className="font-mono text-xs text-muted-foreground">
+            &lt;caption&gt; (visually hidden in app) · th scope=&quot;col&quot; · row hover ·
+            trigger aria-expanded · &quot;…&quot; = opens confirm
+          </p>
+
+          {/* Populated Table */}
+          <Table>
+            <TableCaption>Organizer Campus Events Overview</TableCaption>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Event</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead>Seats</TableHead>
+                <TableHead className="text-right">Actions</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              <TableRow>
+                <TableCell className="font-medium">Data Viz Night</TableCell>
+                <TableCell>
+                  <Badge variant="success">• Published</Badge>
+                </TableCell>
+                <TableCell className="font-mono text-xs">54/60</TableCell>
+                <TableCell className="text-right">
+                  <DropdownMenu>
+                    <DropdownMenuTrigger aria-label="Row actions for Data Viz Night">
+                      <MoreHorizontal className="size-4" />
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                      <DropdownMenuItem onClick={() => announce('Editing Data Viz Night')}>
+                        <Pencil /> Edit event
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => announce('Exporting attendees CSV')}>
+                        <Download /> Export attendees (CSV)
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => announce('Opening check-in view')}>
+                        <QrCode /> Open check-in
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem
+                        variant="destructive"
+                        // opensConfirm
+                        onClick={() => announce('Cancel confirmation requested')}
+                      >
+                        <X /> Cancel event
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </TableCell>
+              </TableRow>
+
+              <TableRow>
+                <TableCell className="font-medium">
+                  Weekend Hackathon{' '}
+                  <span className="ml-1 font-mono text-xs text-muted-foreground">· row hover</span>
+                </TableCell>
+                <TableCell>
+                  <Badge variant="destructive">• Full</Badge>
+                </TableCell>
+                <TableCell className="font-mono text-xs">120/120</TableCell>
+                <TableCell className="text-right">
+                  <Button size="xs" variant="outline">
+                    Edit
+                  </Button>
+                </TableCell>
+              </TableRow>
+
+              <TableRow>
+                <TableCell className="font-medium">ML Reading Group</TableCell>
+                <TableCell>
+                  <Badge variant="draft">• Draft</Badge>
+                </TableCell>
+                <TableCell className="font-mono text-xs text-muted-foreground">—</TableCell>
+                <TableCell className="text-right">
+                  <Button size="xs" variant="outline">
+                    Continue
+                  </Button>
+                </TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+
+          {/* Empty Row State Table Demo */}
+          <div className="flex flex-col gap-2 pt-2">
+            <h3 className="font-mono text-xs tracking-wider text-muted-foreground uppercase">
+              Empty Row State
+            </h3>
+            <Table>
+              <TableCaption>Archived Campus Events</TableCaption>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Event</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead>Seats</TableHead>
+                  <TableHead className="text-right">Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                <TableEmptyRow colSpan={4} message='Empty row state: "No events in this tab."' />
+              </TableBody>
+            </Table>
+          </div>
+        </section>
+
+        {/* Overlays: Dialog & Sheet Section[cite: 4] */}
+        <section
+          className="flex flex-col gap-6 rounded-[20px] border border-border bg-card p-6"
+          style={{ boxShadow: 'var(--shadow-card)' }}
+        >
+          <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
+            <h2 className="font-mono text-sm tracking-wider text-muted-foreground uppercase">
+              Overlays (Dialog &amp; Sheet)
+            </h2>
+            <span className="font-mono text-xs text-muted-foreground">
+              ui/dialog (desktop confirm) · ui/sheet (mobile bottom sheet, filters drawer)
+            </span>
+          </div>
+
+          <p className="font-mono text-xs text-muted-foreground">
+            focus starts on the safe action · trapped · Esc closes · returns focus to trigger on
+            close
+          </p>
+
+          <div className="flex flex-wrap items-center gap-4">
+            {/* Desktop Destructive Confirmation Dialog */}
+            <Dialog>
+              <DialogTrigger
+                render={<Button variant="destructive">Cancel event… (Desktop Dialog)</Button>}
+              />
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Cancel this event?</DialogTitle>
+                  <DialogDescription>
+                    All 132 registered and waitlisted students will be emailed. This can&apos;t be
+                    undone.
+                  </DialogDescription>
+                </DialogHeader>
+                <DialogFooter>
+                  {/* Safe action receives initial focus via autoFocus */}
+                  <DialogClose render={<Button variant="outline">Keep event</Button>} />
+                  <DialogClose
+                    render={
+                      <Button
+                        variant="destructive"
+                        onClick={() => {
+                          toast('Event cancelled.', {
+                            description: 'All 132 registered students have been notified.',
+                            icon: <CheckCircle2 className="size-4 text-success" />,
+                          });
+                          announce('Event cancelled.');
+                        }}
+                      >
+                        Cancel event
+                      </Button>
+                    }
+                  />
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+
+            {/* Mobile Filter Bottom Sheet */}
+            <Sheet>
+              <SheetTrigger
+                render={<Button variant="outline">Filters Drawer (Bottom Sheet)</Button>}
+              />
+              <SheetContent side="bottom" className="mx-auto max-w-lg">
+                <SheetHeader>
+                  <SheetTitle>Filters</SheetTitle>
+                  <button
+                    type="button"
+                    onClick={() => announce('Filters reset')}
+                    className="text-xs text-muted-foreground underline underline-offset-4 hover:text-foreground"
+                  >
+                    Reset
+                  </button>
+                </SheetHeader>
+                <SheetDescription className="sr-only">
+                  Filter campus events by time, weekend availability, and attendance mode.
+                </SheetDescription>
+
+                <div className="flex flex-col gap-3 py-2">
+                  <Field orientation="horizontal" className="items-center">
+                    <Checkbox id="sheet-evening" defaultChecked />
+                    <FieldLabel htmlFor="sheet-evening" className="cursor-pointer font-normal">
+                      Evening (after 5 pm)
+                    </FieldLabel>
+                  </Field>
+                  <Field orientation="horizontal" className="items-center">
+                    <Checkbox id="sheet-weekends" />
+                    <FieldLabel htmlFor="sheet-weekends" className="cursor-pointer font-normal">
+                      Weekends
+                    </FieldLabel>
+                  </Field>
+
+                  <Tabs defaultValue="any" className="mt-2 w-full">
+                    <TabsList className="grid w-full grid-cols-3">
+                      <TabsTrigger value="any">Any</TabsTrigger>
+                      <TabsTrigger value="campus">On campus</TabsTrigger>
+                      <TabsTrigger value="online">Online</TabsTrigger>
+                    </TabsList>
+                  </Tabs>
+                </div>
+
+                <SheetClose
+                  render={
+                    <Button className="w-full" onClick={() => announce('Showing 31 events')}>
+                      Show 31 events
+                    </Button>
+                  }
+                />
+              </SheetContent>
+            </Sheet>
+          </div>
+        </section>
+
+        {/* Feedback Banners & Query Error Section[cite: 2] */}
         <section
           className="flex flex-col gap-6 rounded-[20px] border border-border bg-card p-6"
           style={{ boxShadow: 'var(--shadow-card)' }}
@@ -156,7 +558,7 @@ export default function Home() {
             <Banner
               variant="info"
               title="Free cancellation"
-              description=" until Thu 12 Nov, 18:30."
+              description="until Thu 12 Nov, 18:30."
             />
             <Banner
               variant="success"
@@ -170,7 +572,7 @@ export default function Home() {
               description="Showing numbers from 18:31."
               action={
                 <Button size="sm" variant="outline">
-                  <RotateCw className="size-3.5" />
+                  <RotateCw />
                   <span className="text-foreground">Retry</span>
                 </Button>
               }
@@ -197,7 +599,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Sonner Toasts Confirmation Section */}
+        {/* Sonner Toasts Confirmation Section[cite: 2] */}
         <section
           className="flex flex-col gap-4 rounded-[20px] border border-border bg-card p-6"
           style={{ boxShadow: 'var(--shadow-card)' }}
@@ -281,23 +683,22 @@ export default function Home() {
             <EventCardSkeleton />
           </div>
 
-          <div className="overflow-hidden rounded-xl border border-border">
-            <table aria-busy="true" className="w-full border-collapse text-left text-sm">
-              <thead>
-                <tr className="border-b border-border bg-muted/40 font-mono text-xs text-muted-foreground uppercase">
-                  <th className="p-4">Event ID</th>
-                  <th className="p-4">Title</th>
-                  <th className="p-4">Occupancy</th>
-                  <th className="p-4">Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                <TableRowSkeleton columns={4} />
-                <TableRowSkeleton columns={4} />
-                <TableRowSkeleton columns={4} />
-              </tbody>
-            </table>
-          </div>
+          <Table aria-busy="true">
+            <TableCaption>Loading Campus Events</TableCaption>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Event ID</TableHead>
+                <TableHead>Title</TableHead>
+                <TableHead>Occupancy</TableHead>
+                <TableHead>Status</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              <TableRowSkeleton columns={4} />
+              <TableRowSkeleton columns={4} />
+              <TableRowSkeleton columns={4} />
+            </TableBody>
+          </Table>
         </section>
 
         {/* Badges Demo Section */}
@@ -314,13 +715,18 @@ export default function Home() {
             <Badge variant="outline">Outline</Badge>
             <Badge variant="destructive">Destructive</Badge>
             <Badge variant="ghost">Ghost</Badge>
+            <Badge variant="info">Info</Badge>
+            <Badge variant="warning">Warning</Badge>
+            <Badge variant="success">Success</Badge>
+            <Badge variant="neutral">Neutral</Badge>
+            <Badge variant="draft">Draft</Badge>
             <Badge variant="default" className="gap-1">
               <Sparkles className="size-3" /> Featured
             </Badge>
           </div>
         </section>
 
-        {/* Filter Chips & Removable Chips Section */}
+        {/* Filter Chips & Removable Chips Section[cite: 1] */}
         <section
           className="flex flex-col gap-6 rounded-[20px] border border-border bg-card p-6"
           style={{ boxShadow: 'var(--shadow-card)' }}
@@ -348,8 +754,12 @@ export default function Home() {
               Removable Chip
             </h2>
             <div className="flex flex-wrap items-center gap-2.5">
-              <RemovableChip>After 5 pm</RemovableChip>
-              <RemovableChip>City Centre</RemovableChip>
+              <RemovableChip onRemove={() => announce('Removed After 5 pm filter')}>
+                After 5 pm
+              </RemovableChip>
+              <RemovableChip onRemove={() => announce('Removed City Centre filter')}>
+                City Centre
+              </RemovableChip>
             </div>
           </div>
         </section>
@@ -462,7 +872,7 @@ export default function Home() {
           style={{ boxShadow: 'var(--shadow-card)' }}
         >
           <h2 className="font-mono text-sm tracking-wider text-muted-foreground uppercase">
-            Form Fields & Input States
+            Form Fields &amp; Input States
           </h2>
 
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
@@ -562,9 +972,9 @@ export default function Home() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
-                    <SelectItem value="tech">Technology & AI</SelectItem>
+                    <SelectItem value="tech">Technology &amp; AI</SelectItem>
                     <SelectItem value="business">Entrepreneurship</SelectItem>
-                    <SelectItem value="arts">Culture & Arts</SelectItem>
+                    <SelectItem value="arts">Culture &amp; Arts</SelectItem>
                   </SelectGroup>
                 </SelectContent>
               </Select>
@@ -610,7 +1020,7 @@ export default function Home() {
 
           {/* 10. Textarea Demo */}
           <Field className="pt-2">
-            <FieldLabel htmlFor="event-description">Event Description & Guidelines</FieldLabel>
+            <FieldLabel htmlFor="event-description">Event Description &amp; Guidelines</FieldLabel>
             <Textarea
               id="event-description"
               placeholder="Provide a detailed summary of what attendees can expect..."
@@ -626,7 +1036,7 @@ export default function Home() {
           style={{ boxShadow: 'var(--shadow-card)' }}
         >
           <h2 className="font-mono text-sm tracking-wider text-muted-foreground uppercase">
-            FieldSet & FieldGroup Compositions
+            FieldSet &amp; FieldGroup Compositions
           </h2>
 
           <FieldSet>
@@ -646,31 +1056,6 @@ export default function Home() {
               </Field>
             </FieldGroup>
           </FieldSet>
-        </section>
-
-        {/* Status Banners & Errors */}
-        <section
-          className="flex flex-col gap-4 rounded-[20px] border border-border bg-card p-6"
-          style={{ boxShadow: 'var(--shadow-card)' }}
-        >
-          <h2 className="font-mono text-sm tracking-wider text-muted-foreground uppercase">
-            Status Banners & Field Errors
-          </h2>
-
-          {/* Subtle Status Banner */}
-          <div className="flex items-center justify-between rounded-[12px] border border-success-border bg-success-subtle p-4 font-sans text-sm text-success">
-            <span>Seats confirmed! Your booking for the Tech Workshop has been secured.</span>
-            <span className="font-mono text-xs">10:36 AM</span>
-          </div>
-
-          {/* Boxed Field Error */}
-          <div className="flex flex-col gap-1 rounded-[12px] border border-destructive-border bg-destructive-subtle p-4 font-sans text-sm text-destructive">
-            <span className="font-semibold">Registration Failed</span>
-            <span className="text-xs opacity-90">
-              This event is fully booked. Join the waitlist to receive a notification if a spot
-              opens up.
-            </span>
-          </div>
         </section>
 
         {/* Color Swatches Grid */}
