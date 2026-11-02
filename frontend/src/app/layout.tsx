@@ -4,6 +4,7 @@ import './globals.css';
 import ThemeProvider from '@/app/providers/theme-provider';
 import type { ReactNode } from 'react';
 import { defaultMetadata } from '@/config/site';
+import QueryProvider from '@/app/providers/query-provider';
 
 const bricolageGrotesque = Bricolage_Grotesque({
   variable: '--font-display',
@@ -35,7 +36,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       className={`${bricolageGrotesque.variable} ${ibmPlexMono.variable} ${ibmPlexSans.variable} dark h-full antialiased`}
     >
       <body className="flex min-h-full flex-col">
-        <ThemeProvider>{children}</ThemeProvider>
+        <ThemeProvider>
+          <QueryProvider>{children}</QueryProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
