@@ -3,6 +3,7 @@ import { Bricolage_Grotesque, IBM_Plex_Sans, IBM_Plex_Mono } from 'next/font/goo
 import './globals.css';
 import ThemeProvider from '@/app/providers/theme-provider';
 import type { ReactNode } from 'react';
+import { defaultMetadata } from '@/config/site';
 
 const bricolageGrotesque = Bricolage_Grotesque({
   variable: '--font-display',
@@ -24,10 +25,7 @@ const ibmPlexMono = IBM_Plex_Mono({
   display: 'swap',
 });
 
-export const metadata: Metadata = {
-  title: 'Campus Events Platform',
-  description: 'Discover, book and manage campus events effortlessly',
-};
+export const metadata: Metadata = defaultMetadata;
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
