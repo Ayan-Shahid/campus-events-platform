@@ -1,35 +1,51 @@
 'use client';
 
+import * as React from 'react';
 import { useTheme } from 'next-themes';
-import { Moon, Sun } from 'lucide-react';
+import { Sun, Moon } from 'lucide-react';
+import { cn } from '@/lib/utils';
 import { useHydrated } from '@/hooks/use-hydrated';
 
-function ThemeToggle() {
-  const hydrated = useHydrated();
-  const { resolvedTheme, setTheme } = useTheme();
+export type ThemeToggleProps = React.ComponentProps<'button'>;
 
-  if (!hydrated) return <div aria-hidden={true} className="size-9 rounded-xl border bg-card" />;
+export default function ThemeToggle({ className, ...props }: ThemeToggleProps) {
+  const { resolvedTheme, setTheme } = useTheme();
+  const hydrated = useHydrated();
+
+  if (!hydrated) {
+    return (
+      <div
+        aria-hidden="true"
+        data-slot="theme-toggle-placeholder"
+        className={cn('size-9 rounded-lg border border-border bg-muted/30', className)}
+      />
+    );
+  }
 
   const isDark = resolvedTheme === 'dark';
-
-  const nextTheme = isDark ? 'light' : 'dark';
-
-  const ariaLabel = `Switch to ${nextTheme} theme`;
+  const label = isDark ? 'Switch to light' : 'Switch to dark';
 
   return (
     <button
-      onClick={() => setTheme(nextTheme)}
-      aria-label={ariaLabel}
-      className="relative flex size-9 items-center justify-center rounded-xl border bg-card text-foreground transition-colors hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+      type="button"
+      aria-label={label}
+      onClick={() => setTheme(isDark ? 'light' : 'dark')}
+      data-slot="theme-toggle"
+      className={cn(
+        'inline-flex size-9 items-center justify-center rounded-sm border border-border bg-card text-muted-foreground transition-colors',
+        'hover:bg-muted hover:text-foreground',
+        'focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none',
+        className,
+      )}
+      {...props}
     >
-      {' '}
       {isDark ? (
-        <Sun className="size-4 text-primary transition-transform hover:scale-110" />
+        <Sun className={cn('size-4')} aria-hidden="true" />
       ) : (
-        <Moon className="size-4 text-primary transition-transform hover:scale-110" />
+        <Moon className={cn('size-4')} aria-hidden="true" />
       )}
     </button>
   );
 }
 
-export default ThemeToggle;
+export { ThemeToggle };
