@@ -3,7 +3,8 @@ import { Bricolage_Grotesque, IBM_Plex_Sans, IBM_Plex_Mono } from 'next/font/goo
 import './globals.css';
 import type { ReactNode } from 'react';
 import { defaultMetadata } from '@/config/site';
-import AppProviders from '@/app/providers/app-providers';
+import Providers from './providers/providers';
+import { headers } from 'next/headers';
 
 const bricolageGrotesque = Bricolage_Grotesque({
   variable: '--font-display',
@@ -27,7 +28,8 @@ const ibmPlexMono = IBM_Plex_Mono({
 
 export const metadata: Metadata = defaultMetadata;
 
-export default function RootLayout({ children }: { children: ReactNode }) {
+export default async function RootLayout({ children }: { children: ReactNode }) {
+  const nonce = (await headers()).get('x-nonce') ?? undefined;
   return (
     <html
       lang="en"
@@ -35,7 +37,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       className={`${bricolageGrotesque.variable} ${ibmPlexMono.variable} ${ibmPlexSans.variable} dark h-full antialiased`}
     >
       <body className="flex min-h-full flex-col">
-        <AppProviders>{children}</AppProviders>
+        <Providers nonce={nonce}>{children}</Providers>
       </body>
     </html>
   );

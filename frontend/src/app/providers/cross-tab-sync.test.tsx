@@ -1,22 +1,16 @@
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { render } from '@testing-library/react';
 import * as React from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import CrossTabSync from '@/app/providers/cross-tab-sync';
 import { createCrossTabChannel } from '@/lib/cross-tab/channel';
 import { sessionQueryKey } from '@/lib/query/session-key';
+import { createTestQueryClient, renderWithProviders } from '@tests/utils/render';
 
 function setup() {
-  const client = new QueryClient();
+  const client = createTestQueryClient();
   const navigate = vi.fn();
   const invalidateQueries = vi.spyOn(client, 'invalidateQueries');
   const clear = vi.spyOn(client, 'clear');
 
-  render(
-    <QueryClientProvider client={client}>
-      <CrossTabSync navigate={navigate} />
-    </QueryClientProvider>,
-  );
+  renderWithProviders(<p>page</p>, { queryClient: client, crossTabSync: { navigate } });
 
   // Another tab: a separate channel with its own sender id.
   const otherTab = createCrossTabChannel({ senderId: 'other-tab' });
