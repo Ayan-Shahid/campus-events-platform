@@ -5,6 +5,7 @@ import ThemeProvider from '@/app/providers/theme-provider';
 import type { ReactNode } from 'react';
 import { defaultMetadata } from '@/config/site';
 import QueryProvider from '@/app/providers/query-provider';
+import { NuqsAdapter } from 'nuqs/adapters/next/app';
 
 const bricolageGrotesque = Bricolage_Grotesque({
   variable: '--font-display',
@@ -37,7 +38,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     >
       <body className="flex min-h-full flex-col">
         <ThemeProvider>
-          <QueryProvider>{children}</QueryProvider>
+          <NuqsAdapter>
+            <QueryProvider>{children}</QueryProvider>
+          </NuqsAdapter>
         </ThemeProvider>
       </body>
     </html>
