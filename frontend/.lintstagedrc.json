@@ -4,5 +4,5 @@
     "prettier --write",
     "vitest related --run --passWithNoTests"
   ],
-  "*.{css,json,md,frag,vert}": ["prettier --write"]
+  "*.{css,json,md}": ["prettier --write"]
 }

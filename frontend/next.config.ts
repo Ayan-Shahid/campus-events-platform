@@ -25,6 +25,9 @@ const nextConfig: NextConfig = {
         loaders: ['@tailwindcss/turbopack'],
         as: '*.css',
       },
+      '*.vert': { type: 'raw' },
+      '*.frag': { type: 'raw' },
+      '*.glsl': { type: 'raw' },
     },
   },
   async headers() {

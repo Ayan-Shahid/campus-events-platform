@@ -1,9 +1,19 @@
 import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
-import { loadEnv } from 'vite';
+import { loadEnv, type Plugin } from 'vite';
+
+const rawShaders = (): Plugin => ({
+  name: 'raw-shaders',
+  enforce: 'pre',
+  transform(code, id) {
+    if (/\.(vert|frag|glsl)$/.test(id.split('?')[0] ?? id)) {
+      return { code: `export default ${JSON.stringify(code)};`, map: null };
+    }
+  },
+});
 
 export default defineConfig(({ mode }) => ({
-  plugins: [react()],
+  plugins: [react(), rawShaders()],
   resolve: { tsconfigPaths: true },
   test: {
     environment: 'jsdom',
