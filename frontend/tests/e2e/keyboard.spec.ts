@@ -2,17 +2,22 @@ import { expect, test } from '@playwright/test';
 import { DEV_UI, waitForHydration } from './helpers';
 
 test.describe('keyboard navigation', () => {
-  test('the skip link is the first tab stop and moves focus into main', async ({ page }) => {
-    await page.goto('/');
+  test('the skip link is the first tab stop and moves focus into main', async ({
+    page,
+    browserName,
+  }) => {
+    // macOS WebKit (Safari) only Tabs to form controls; Option+Tab reaches links too.
+    const tabKey = browserName === 'webkit' && process.platform === 'darwin' ? 'Alt+Tab' : 'Tab';
 
-    await page.keyboard.press('Tab');
+    await page.goto('/');
+    await waitForHydration(page);
+
+    await page.keyboard.press(tabKey);
     const skipLink = page.getByRole('link', { name: 'Skip to main content' });
     await expect(skipLink).toBeFocused();
 
     await page.keyboard.press('Enter');
 
-    // `main` is focusable (tabIndex -1), so focus lands on it directly; accepting a
-    // descendant keeps the test about the behaviour rather than the exact element.
     await expect
       .poll(() => page.evaluate(() => !!document.activeElement?.closest('main')))
       .toBe(true);

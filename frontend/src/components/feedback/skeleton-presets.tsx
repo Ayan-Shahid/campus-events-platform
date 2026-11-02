@@ -13,6 +13,7 @@ export function Skeleton({ className, ...props }: React.ComponentProps<'div'>) {
 export function EventCardSkeleton({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
+      role="group"
       aria-busy={true}
       aria-label="Loading event card"
       className={cn('flex flex-col gap-4 rounded-xl border border-border bg-card p-5', className)}
@@ -52,6 +53,7 @@ export function KPITileSkeleton({ className, ...props }: React.ComponentProps<'d
     <div
       aria-busy={true}
       aria-label="Loading metric"
+      role="group"
       className={cn(
         'flex flex-col gap-3 rounded-[18px] border border-border bg-card p-5',
         className,

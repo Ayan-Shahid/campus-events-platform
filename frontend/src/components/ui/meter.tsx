@@ -11,6 +11,18 @@ interface MeterProps extends React.ComponentProps<typeof Progress> {
   segmentsCount?: number;
 }
 
+const toneFillClasses = {
+  default: 'bg-gradient-meter-default',
+  success: 'bg-gradient-meter-success',
+  danger: 'bg-gradient-meter-danger',
+};
+
+const toneIndicatorClasses = {
+  default: '[&_[data-slot=progress-indicator]]:bg-gradient-meter-default',
+  success: '[&_[data-slot=progress-indicator]]:bg-gradient-meter-success',
+  danger: '[&_[data-slot=progress-indicator]]:bg-gradient-meter-danger',
+};
+
 function Meter({
   value,
   segmented = false,
@@ -23,38 +35,31 @@ function Meter({
 }: MeterProps) {
   const percentage = Math.min(Math.max((value / max) * 100, 0), 100);
 
-  const toneIndicatorClasses = {
-    default: '[&_[data-slot=progress-indicator]]:bg-gradient-meter-default',
-    success: '[&_[data-slot=progress-indicator]]:bg-gradient-meter-success',
-    danger: '[&_[data-slot=progress-indicator]]:bg-gradient-meter-danger',
-  };
-
   if (segmented) {
     const activeSegmentIndex = Math.round((percentage / 100) * segmentsCount);
 
     return (
       <div
         data-slot="meter"
+        role="meter"
+        aria-label={props['aria-label'] ?? label}
         aria-valuetext={label}
         aria-valuenow={value}
         aria-valuemin={0}
         aria-valuemax={max}
-        role="meter"
         className={cn('flex w-full flex-col gap-2', className)}
       >
-        <div className={cn('grid w-full grid-flow-col gap-1.5', className)}>
-          {Array.from({ length: segmentsCount }).map((_, index) => {
-            const isActive = index < activeSegmentIndex;
-            return (
-              <Progress
-                key={index}
-                value={isActive ? 100 : 0}
-                tabIndex={-1}
-                aria-hidden={true}
-                className="gap-0"
-              />
-            );
-          })}
+        {/* Decorative segments: plain divs, not nested progressbars. */}
+        <div aria-hidden="true" className="grid w-full grid-flow-col gap-1.5">
+          {Array.from({ length: segmentsCount }).map((_, index) => (
+            <div
+              key={index}
+              className={cn(
+                'h-2 rounded-full',
+                index < activeSegmentIndex ? toneFillClasses[tone] : 'bg-muted',
+              )}
+            />
+          ))}
         </div>
       </div>
     );
@@ -62,7 +67,9 @@ function Meter({
 
   return (
     <Progress
-      value={percentage}
+      value={value}
+      max={max}
+      aria-label={props['aria-label'] ?? label}
       aria-valuetext={label}
       data-slot="meter"
       className={cn('w-full', toneIndicatorClasses[tone], className)}

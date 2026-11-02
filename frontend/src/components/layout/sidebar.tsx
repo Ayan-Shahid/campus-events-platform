@@ -100,7 +100,6 @@ export function Sidebar({
                 <Link
                   href={item.href}
                   aria-current={item.current ? 'page' : undefined}
-                  aria-label={accessibleText}
                   className={cn(
                     'flex w-full items-center justify-between rounded-sm px-3 py-2.5 text-sm font-normal text-muted-foreground transition-colors',
                     'hover:bg-muted/60 hover:text-foreground',

@@ -4,6 +4,8 @@ import nextTs from 'eslint-config-next/typescript';
 import eslintConfigPrettier from 'eslint-config-prettier';
 import pluginQuery from '@tanstack/eslint-plugin-query';
 import jsxA11y from 'eslint-plugin-jsx-a11y';
+import testingLibrary from 'eslint-plugin-testing-library';
+import jestDom from 'eslint-plugin-jest-dom';
 
 const eslintConfig = defineConfig([
   ...nextVitals,
@@ -67,6 +69,11 @@ const eslintConfig = defineConfig([
       '@typescript-eslint/consistent-type-imports': 'error',
       'no-console': ['warn', { allow: ['warn', 'error'] }],
     },
+  },
+  // 6. Unit tests only: Testing Library (React) + jest-dom rules
+  {
+    files: ['**/*.test.{ts,tsx}'],
+    extends: [testingLibrary.configs['flat/react'], jestDom.configs['flat/recommended']],
   },
   // Override default ignores of eslint-config-next.
   globalIgnores([

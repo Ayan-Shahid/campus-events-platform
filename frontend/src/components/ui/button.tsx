@@ -2,6 +2,7 @@ import { Button as ButtonPrimitive } from '@base-ui/react/button';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from 'cn';
 import { Loader2 } from 'lucide-react';
+import React from 'react';
 
 const buttonVariants = cva(
   [
@@ -120,4 +121,18 @@ function Button({
   );
 }
 
-export { Button, buttonVariants };
+function ButtonLink({
+  className,
+  variant = 'default',
+  size = 'default',
+  children,
+  ...props
+}: React.ComponentProps<'a'> & VariantProps<typeof buttonVariants>) {
+  return (
+    <a data-slot="button" className={cn(buttonVariants({ variant, size, className }))} {...props}>
+      {children}
+    </a>
+  );
+}
+
+export { Button, buttonVariants, ButtonLink };
