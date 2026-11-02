@@ -130,6 +130,14 @@
   --sidebar-accent-foreground: #12141f;
   --sidebar-border: rgba(18, 20, 31, 0.1);
   --sidebar-ring: #c2410c;
+
+  /* Shader palette - Light (warm paper). Read by lib/webgl/palette.ts; keep values hex or rgb(). */
+  --shader-0: #f6f1e7; /* paper base */
+  --shader-1: #e7dccb; /* paper mid */
+  --shader-2: #dcc6a4; /* sand veins */
+  --shader-3: #f4c9a6; /* peach glow */
+  --shader-accent: #8a5a34; /* ink contours */
+  --shader-grain: 0.03;
 }
 
 .dark {
@@ -188,6 +196,14 @@
   --sidebar-accent-foreground: #eef0f8;
   --sidebar-border: rgba(255, 255, 255, 0.09);
   --sidebar-ring: #ff9152;
+
+  /* Shader palette - Dark. Read by lib/webgl/palette.ts; keep values hex or rgb(). */
+  --shader-0: #0a1124; /* navy */
+  --shader-1: #1b2b5e; /* blue */
+  --shader-2: #168a80; /* teal veins */
+  --shader-3: #ff8a4c; /* ember glow */
+  --shader-accent: #8fd9f2; /* contours */
+  --shader-grain: 0.05;
 }
 
 @layer base {

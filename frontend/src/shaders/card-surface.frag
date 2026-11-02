@@ -19,8 +19,6 @@ const float NOISE_MIX = 0.35;  // how far fbm may pull palette 0 toward palette 
 const float SWEEP = 0.04;      // light sweep strength  <- first thing to reduce on a contrast fail
 const float WARM = 0.05;       // glow near the bottom edge
 const float COOL = 0.04;       // glow in the top-left corner
-const vec3 WARM_COLOR = vec3(1.0, 0.62, 0.35);
-const vec3 COOL_COLOR = vec3(0.35, 0.70, 1.0);
 
 void main() {
     float aspect = u_resolution.x / u_resolution.y;
@@ -38,9 +36,9 @@ void main() {
     col += u_accent * band * SWEEP;
 
     // v_uv.y is 0 at the bottom edge and 1 at the top. Warm glow below, cool glow top-left.
-    col += WARM_COLOR * smoothstep(0.35, 0.0, v_uv.y) * WARM;
+    col += u_palette[3] * smoothstep(0.35, 0.0, v_uv.y) * WARM;
     float corner = length((v_uv - vec2(0.0, 1.0)) * vec2(aspect, 1.0));
-    col += COOL_COLOR * smoothstep(0.9, 0.0, corner) * COOL;
+    col += u_palette[2] * smoothstep(0.9, 0.0, corner) * COOL;
 
     // Grain, weaker than the background's.
     vec2 frame = floor(u_time * 24.0) * vec2(37.0, 17.0);

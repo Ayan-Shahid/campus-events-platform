@@ -1,6 +1,3 @@
-// Page background. Composed as: header ("#version 300 es" + precision) + chunks/noise.glsl + this file.
-// Needs hash21() and fbm() from the noise chunk, so it will not compile on its own.
-
 uniform vec2 u_resolution; // canvas size in pixels
 uniform float u_time;      // seconds; slowed down below
 uniform float u_seed;      // per-instance offset, in noise cells (use something like 0..100)
@@ -19,11 +16,9 @@ const float LINE_SPEED = 0.02;  // how fast the contours crawl
 void main() {
     float t = u_time * FLOW_SPEED;
 
-    // Aspect-correct coordinates, centred, offset by the per-instance seed.
     float aspect = u_resolution.x / u_resolution.y;
     vec2 p = (v_uv - 0.5) * vec2(aspect, 1.0) * SCALE + u_seed * vec2(1.0, 0.7);
 
-    // Domain warping: noise bends the lookup of noise, which gives the slow liquid flow.
     vec2 q = vec2(
     fbm(p + vec2(0.0, t)),
     fbm(p + vec2(5.2, 1.3) - vec2(t, 0.0))
@@ -34,7 +29,6 @@ void main() {
     );
     float f = fbm(p + 4.0 * w);
 
-    // Base colour: palette 0 -> 1 by f, then palette 2 where w.x is high (the teal veins).
     vec3 col = mix(u_palette[0], u_palette[1], smoothstep(0.15, 0.85, f));
     col = mix(col, u_palette[2], smoothstep(0.55, 0.85, w.x) * 0.65);
 
@@ -47,9 +41,15 @@ void main() {
     float patches = smoothstep(0.5, 0.75, w.y);
     col = mix(col, u_accent, line * patches * 0.7);
 
-    // Soft vignette: edges fall toward the shadow colour so centred text keeps its contrast.
-    float vignette = smoothstep(0.35, 1.0, length((v_uv - 0.5) * vec2(aspect, 1.0)) / (0.5 * max(aspect, 1.0)));
-    col = mix(col, u_palette[3], vignette * 0.8);
+    // A hint of the glow colour on the brightest crests of the flow.
+    col = mix(col, u_palette[3], smoothstep(0.72, 0.95, f) * 0.3);
+
+    // Soft vignette: darker at the edges so centred text keeps its contrast. It scales with how
+    // dark the base colour is, strong on the dark theme and only a gentle shading on light paper.
+    float baseLuma = dot(u_palette[0], vec3(0.299, 0.587, 0.114));
+    float strength = mix(0.7, 0.12, smoothstep(0.1, 0.7, baseLuma));
+    float edge = length((v_uv - 0.5) * vec2(aspect, 1.0)) / (0.5 * max(aspect, 1.0));
+    col *= 1.0 - strength * smoothstep(0.35, 1.0, edge);
 
     // Grain: per-pixel hash, re-seeded 24 times a second like film. Frozen when u_time is frozen.
     vec2 frame = floor(u_time * 24.0) * vec2(37.0, 17.0);
