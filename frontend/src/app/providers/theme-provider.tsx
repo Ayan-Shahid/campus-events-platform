@@ -4,7 +4,7 @@ import type { ReactNode } from 'react';
 import React from 'react';
 import { ThemeProvider as NextThemeProvider } from 'next-themes';
 
-function ThemeProvider({ children }: { children: ReactNode }) {
+function ThemeProvider({ children, nonce }: { children: ReactNode; nonce?: string }) {
   const [isMobile, setIsMobile] = React.useState(false);
 
   React.useEffect(() => {
@@ -14,7 +14,13 @@ function ThemeProvider({ children }: { children: ReactNode }) {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
   return (
-    <NextThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
+    <NextThemeProvider
+      nonce={nonce}
+      attribute="class"
+      defaultTheme="dark"
+      enableSystem
+      disableTransitionOnChange
+    >
       {children}
       <div className="sr-only">
         <div id="a11y-announcer-polite" role="status" aria-live="polite" aria-atomic="true" />

@@ -1,11 +1,9 @@
 import type { Metadata } from 'next';
 import { Bricolage_Grotesque, IBM_Plex_Sans, IBM_Plex_Mono } from 'next/font/google';
 import './globals.css';
-import ThemeProvider from '@/app/providers/theme-provider';
 import type { ReactNode } from 'react';
 import { defaultMetadata } from '@/config/site';
-import QueryProvider from '@/app/providers/query-provider';
-import { NuqsAdapter } from 'nuqs/adapters/next/app';
+import AppProviders from '@/app/providers/app-providers';
 
 const bricolageGrotesque = Bricolage_Grotesque({
   variable: '--font-display',
@@ -37,11 +35,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       className={`${bricolageGrotesque.variable} ${ibmPlexMono.variable} ${ibmPlexSans.variable} dark h-full antialiased`}
     >
       <body className="flex min-h-full flex-col">
-        <ThemeProvider>
-          <NuqsAdapter>
-            <QueryProvider>{children}</QueryProvider>
-          </NuqsAdapter>
-        </ThemeProvider>
+        <AppProviders>{children}</AppProviders>
       </body>
     </html>
   );
