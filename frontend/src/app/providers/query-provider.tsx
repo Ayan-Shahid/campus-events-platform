@@ -4,6 +4,7 @@ import { QueryClientProvider } from '@tanstack/react-query';
 import dynamic from 'next/dynamic';
 import type { ReactNode } from 'react';
 import { getQueryClient } from '@/lib/query/get-query-client';
+import CrossTabSync from '@/app/providers/cross-tab-sync';
 
 const ReactQueryDevtools =
   process.env.NODE_ENV === 'development'
@@ -19,6 +20,7 @@ export default function QueryProvider({ children }: { children: ReactNode }) {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <CrossTabSync />
       {children}
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>

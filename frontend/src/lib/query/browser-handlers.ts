@@ -6,12 +6,12 @@ import { toast } from 'sonner';
 import { routes } from '@/config/routes';
 import { getSignInPath } from '@/lib/url/safe-redirect';
 import type { QueryClientHandlers } from '@/lib/query/make-query-client';
+import { crossTab } from '@/lib/cross-tab/channel';
 
 let handlingUnauthorized = false;
 
-/** Step 5: tell other tabs the user signed out (e.g. via BroadcastChannel). */
 function broadcastSignedOut(): void {
-  // Wired up in step 5.
+  crossTab.post({ type: 'auth:signed-out' });
 }
 
 function redirectToSignIn(): void {
@@ -22,13 +22,11 @@ function redirectToSignIn(): void {
 
   const { pathname, search, hash } = window.location;
 
-  // A full navigation, not router.push: it also drops everything held in memory.
   window.location.assign(getSignInPath(pathname + search + hash));
 }
 
 export const browserHandlers: QueryClientHandlers = {
   onUnauthorized(_error, client) {
-    // Several queries usually fail together; react once.
     if (handlingUnauthorized) return;
     handlingUnauthorized = true;
 
@@ -38,7 +36,6 @@ export const browserHandlers: QueryClientHandlers = {
   },
 
   onBackgroundRefreshError(_error, query) {
-    // One shared id so a burst of failing refetches shows a single toast.
     toast.error(query.meta?.refreshErrorMessage ?? "Couldn't refresh this data", {
       id: 'background-refresh-error',
     });
