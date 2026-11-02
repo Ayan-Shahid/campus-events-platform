@@ -1,1 +1,1 @@
-cd frontend && npm run typechecck && npm run test:run
+cd frontend && npm run typecheck && npm run test:run
