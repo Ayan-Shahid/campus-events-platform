@@ -23,7 +23,7 @@ export default function ThemeToggle({ className, ...props }: ThemeToggleProps) {
   }
 
   const isDark = resolvedTheme === 'dark';
-  const label = isDark ? 'Switch to light' : 'Switch to dark';
+  const label = isDark ? 'Switch to light theme' : 'Switch to dark theme';
 
   return (
     <button
