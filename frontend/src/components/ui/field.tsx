@@ -60,27 +60,27 @@ function FieldGroup({ className, ...props }: React.ComponentProps<'div'>) {
 }
 
 const fieldVariants = cva(
-  cn('group/field flex w-full gap-2', 'data-[invalid=true]:text-destructive'),
+  ['group/field flex w-full gap-2', 'data-[invalid=true]:text-destructive'],
   {
     variants: {
       orientation: {
-        vertical: cn('flex-col', '*:w-full', '[&>.sr-only]:w-auto'),
-        horizontal: cn(
+        vertical: ['flex-col', '*:w-full', '[&>.sr-only]:w-auto'],
+        horizontal: [
           'flex-row items-center',
           'has-[>[data-slot=field-content]]:items-start',
           '*:data-[slot=field-label]:flex-auto',
           'has-[>[data-slot=field-content]]:[&>[role=checkbox],[role=radio]]:mt-px',
-        ),
-        responsive: cn(
+        ],
+        responsive: [
           'flex-col',
-          '*:w-full',
-          '[&>.sr-only]:w-auto',
           '@md/field-group:flex-row @md/field-group:items-center',
           '@md/field-group:*:w-auto',
-          '@md/field-group:has-[>[data-slot=field-content]]:items-start',
           '@md/field-group:*:data-[slot=field-label]:flex-auto',
+          '@md/field-group:has-[>[data-slot=field-content]]:items-start',
           '@md/field-group:has-[>[data-slot=field-content]]:[&>[role=checkbox],[role=radio]]:mt-px',
-        ),
+          '*:w-full',
+          '[&>.sr-only]:w-auto',
+        ],
       },
     },
     defaultVariants: {
@@ -122,13 +122,14 @@ function FieldLabel({ className, ...props }: React.ComponentProps<typeof Label>)
       className={cn(
         'group/field-label peer/field-label flex w-fit gap-2 leading-snug',
         'group-data-[disabled=true]/field:opacity-50',
-        'group-data-[invalid=true]/field:text-destructive-text',
+        'group-data-[invalid=true]/field:text-destructive',
         'has-data-checked:border-primary/30 has-data-checked:bg-primary/5',
         'has-[>[data-slot=field]]:w-full has-[>[data-slot=field]]:flex-col has-[>[data-slot=field]]:rounded-lg has-[>[data-slot=field]]:border',
         'has-[>[data-slot=field]]:not-has-[:disabled,[data-disabled]]:hover:bg-muted/50',
         'has-[>[data-slot=field]]:has-focus-visible:border-ring has-[>[data-slot=field]]:has-focus-visible:ring-3 has-[>[data-slot=field]]:has-focus-visible:ring-ring/50',
         '*:data-[slot=field]:p-2.5',
         'dark:has-data-checked:border-primary/20 dark:has-data-checked:bg-primary/10',
+        'dark:group-data-[invalid=true]/field:text-destructive-text',
         className,
       )}
       {...props}
@@ -264,7 +265,8 @@ function FieldError({
     <div
       data-slot="field-error"
       className={cn(
-        'flex flex-row items-center justify-between gap-2.5 rounded-sm border border-destructive-border bg-destructive-subtle px-3 py-2 text-sm font-normal text-destructive-text',
+        'flex flex-row items-center justify-between gap-2.5 rounded-sm border border-destructive-border bg-destructive-subtle px-3 py-2 text-sm font-normal text-destructive',
+        'dark:text-destructive-text',
         className,
       )}
       {...props}

@@ -58,10 +58,10 @@ function FilterChip({
       onClick={handleClick}
       className={cn(
         chipVariants({ size }),
-        'border border-border-strong bg-secondary text-muted-foreground',
+        'border border-border-strong bg-primary-foreground text-foreground',
         'hover:border-foreground/30 hover:text-foreground',
-        'aria-pressed:border-transparent aria-pressed:bg-foreground',
-        'dark:bg-secondary dark:font-light',
+        'aria-pressed:border-transparent aria-pressed:bg-foreground aria-pressed:text-primary-foreground',
+        'dark:bg-secondary dark:font-light dark:text-muted-foreground',
         'dark:aria-pressed:border-transparent dark:aria-pressed:bg-foreground dark:aria-pressed:font-bold dark:aria-pressed:text-background',
         className,
       )}
@@ -97,7 +97,7 @@ function RemovableChip({
       {...props}
     >
       <span>{children}</span>
-      {!onRemove && (
+      {onRemove && (
         <button
           type="button"
           aria-label={removeLabel}
