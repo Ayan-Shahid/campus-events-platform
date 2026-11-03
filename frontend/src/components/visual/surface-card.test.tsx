@@ -1,80 +1,61 @@
 import * as React from 'react';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
-import { SurfaceCard } from './surface-card';
+import { describe, expect, it, vi } from 'vitest';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import ShaderCanvas from './shader-canvas';
 
-const mocks = vi.hoisted(() => ({
-  detectWebGL2: vi.fn(() => false),
-  registerRenderTarget: vi.fn(() => () => undefined),
-}));
-
+vi.mock('@/lib/webgl/renderer', () => ({ registerRenderTarget: () => () => undefined }));
 vi.mock('@/lib/webgl/support', () => ({
-  detectWebGL2: mocks.detectWebGL2,
   shouldAnimate: () => true,
   onAnimationPreferenceChange: () => () => undefined,
 }));
-vi.mock('@/lib/webgl/renderer', () => ({ registerRenderTarget: mocks.registerRenderTarget }));
 
-function shaderCanvas(): HTMLCanvasElement | null {
-  return screen.getByTestId('card').querySelector('canvas');
-}
+// Decorative canvases are aria-hidden with no role, so Testing Library has no query for them.
+/* eslint-disable testing-library/no-node-access */
+const canvas = () => document.querySelector('canvas');
+/* eslint-enable testing-library/no-node-access */
 
-describe('SurfaceCard', () => {
-  beforeEach(() => {
-    mocks.detectWebGL2.mockReturnValue(false);
+describe('ShaderCanvas accessibility', () => {
+  it.each(['background', 'surface'] as const)(
+    'a %s canvas is decorative: hidden from assistive tech and inert',
+    (kind) => {
+      render(<ShaderCanvas kind={kind} seed={1} />);
+
+      expect(canvas()).toHaveAttribute('aria-hidden', 'true');
+      expect(canvas()).toHaveAttribute('inert');
+    },
+  );
+
+  it('has no tabindex, role or accessible name', () => {
+    render(<ShaderCanvas kind="surface" seed={1} />);
+
+    expect(canvas()).not.toHaveAttribute('tabindex');
+    expect(canvas()).not.toHaveAttribute('role');
+    expect(canvas()).not.toHaveAttribute('aria-label');
+    expect(canvas()).not.toHaveAttribute('aria-labelledby');
   });
 
-  it('renders the plain card colour for surface="plain"', () => {
-    mocks.detectWebGL2.mockReturnValue(true);
-    render(<SurfaceCard data-testid="card">content</SurfaceCard>);
+  it('is not in the accessibility tree', () => {
+    render(<ShaderCanvas kind="surface" seed={1} />);
 
-    expect(screen.getByTestId('card')).toHaveAttribute('data-surface', 'plain');
-    expect(shaderCanvas()).toBeNull();
-    expect(mocks.registerRenderTarget).not.toHaveBeenCalled();
+    expect(screen.queryByRole('img')).not.toBeInTheDocument();
+    expect(screen.queryByRole('presentation')).not.toBeInTheDocument();
   });
 
-  it('falls back to the plain card colour when WebGL is not supported', () => {
+  it('keyboard navigation skips it: Tab goes to the real control, never the canvas', async () => {
+    const user = userEvent.setup();
     render(
-      <SurfaceCard surface="shader" data-testid="card">
-        content
-      </SurfaceCard>,
+      <div>
+        <button>Before</button>
+        <ShaderCanvas kind="surface" seed={1} />
+        <button>After</button>
+      </div>,
     );
 
-    expect(shaderCanvas()).toBeNull();
-    expect(mocks.registerRenderTarget).not.toHaveBeenCalled();
-    expect(screen.getByText('content')).toBeInTheDocument();
-  });
-
-  it('renders the decorative canvas and registers it when WebGL is supported', async () => {
-    mocks.detectWebGL2.mockReturnValue(true);
-    render(
-      <SurfaceCard surface="shader" seed={12.5} data-testid="card">
-        content
-      </SurfaceCard>,
-    );
-
-    await waitFor(() => {
-      expect(shaderCanvas()).not.toBeNull();
-    });
-    expect(shaderCanvas()).toHaveAttribute('aria-hidden', 'true');
-    expect(mocks.registerRenderTarget).toHaveBeenCalledWith(
-      expect.objectContaining({ kind: 'surface', seed: 12.5, canvas: shaderCanvas() }),
-    );
-  });
-
-  it('keeps content readable above the decorative layer', async () => {
-    mocks.detectWebGL2.mockReturnValue(true);
-    render(<SurfaceCard surface="shader">Evening talk</SurfaceCard>);
-
-    expect(screen.getByText('Evening talk')).toBeVisible();
-  });
-
-  it('still draws shaderGraphic over the card for shader surfaces only', () => {
-    const graphic = <div data-testid="graphic" />;
-    const { rerender } = render(<SurfaceCard surface="shader" shaderGraphic={graphic} />);
-    expect(screen.getByTestId('graphic')).toBeInTheDocument();
-
-    rerender(<SurfaceCard surface="plain" shaderGraphic={graphic} />);
-    expect(screen.queryByTestId('graphic')).not.toBeInTheDocument();
+    await user.tab();
+    expect(screen.getByRole('button', { name: 'Before' })).toHaveFocus();
+    await user.tab();
+    expect(screen.getByRole('button', { name: 'After' })).toHaveFocus();
+    expect(canvas()).not.toHaveFocus();
   });
 });

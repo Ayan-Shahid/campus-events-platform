@@ -18,6 +18,7 @@ export default function ShaderCanvas({ kind, seed }: ShaderCanvasProps) {
     <canvas
       ref={canvasRef}
       aria-hidden={true}
+      inert
       data-slot="shader-canvas"
       className={cn(
         'absolute inset-0 size-full',
