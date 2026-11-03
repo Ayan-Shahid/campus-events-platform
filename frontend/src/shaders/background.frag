@@ -1,3 +1,6 @@
+// Page background. Composed as: header ("#version 300 es" + precision) + chunks/noise.glsl + this file.
+// Needs hash21() and fbm() from the noise chunk, so it will not compile on its own.
+
 uniform vec2 u_resolution; // canvas size in pixels
 uniform float u_time;      // seconds; slowed down below
 uniform float u_seed;      // per-instance offset, in noise cells (use something like 0..100)
