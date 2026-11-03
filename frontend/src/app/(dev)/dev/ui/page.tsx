@@ -22,7 +22,7 @@ const checklist = [
 
 export default function UiShowcasePage() {
   return (
-    <div className="flex min-h-screen flex-col bg-background text-foreground">
+    <div className="flex min-h-screen flex-col text-foreground">
       <SkipLink targetId="main" />
       <TopNav />
 
