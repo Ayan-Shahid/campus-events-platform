@@ -5,6 +5,7 @@ import type { ReactNode } from 'react';
 import { defaultMetadata } from '@/config/site';
 import Providers from './providers/providers';
 import { headers } from 'next/headers';
+import { ShaderBackground } from '@/components/visual/shader-background';
 
 const bricolageGrotesque = Bricolage_Grotesque({
   variable: '--font-display',
@@ -37,6 +38,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
       className={`${bricolageGrotesque.variable} ${ibmPlexMono.variable} ${ibmPlexSans.variable} dark h-full antialiased`}
     >
       <body className="flex min-h-full flex-col">
+        <ShaderBackground />
         <Providers nonce={nonce}>{children}</Providers>
       </body>
     </html>

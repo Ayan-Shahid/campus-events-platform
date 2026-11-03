@@ -138,6 +138,7 @@
   --shader-3: #f4c9a6; /* peach glow */
   --shader-accent: #8a5a34; /* ink contours */
   --shader-grain: 0.03;
+  --shader-vignette: 12%; /* edge darkening of the CSS fallback; matches the shader's light-theme strength */
 }
 
 .dark {
@@ -204,6 +205,36 @@
   --shader-3: #ff8a4c; /* ember glow */
   --shader-accent: #8fd9f2; /* contours */
   --shader-grain: 0.05;
+  --shader-vignette: 70%; /* edge darkening of the CSS fallback; matches the shader's dark-theme strength */
+}
+
+/*
+ * Static stand-in for the WebGL background: the same shader tokens as radial gradients.
+ * Server-rendered, so first paint already looks right and the canvas fades in over it.
+ */
+@utility bg-shader-fallback {
+  background-color: var(--shader-0);
+  background-image:
+    radial-gradient(
+      ellipse at center,
+      transparent 45%,
+      color-mix(in srgb, var(--shader-0), black var(--shader-vignette)) 130%
+    ),
+    radial-gradient(
+      ellipse 80% 60% at 20% 15%,
+      color-mix(in srgb, var(--shader-1) 85%, transparent),
+      transparent 70%
+    ),
+    radial-gradient(
+      ellipse 60% 50% at 85% 80%,
+      color-mix(in srgb, var(--shader-2) 45%, transparent),
+      transparent 70%
+    ),
+    radial-gradient(
+      ellipse 50% 40% at 70% 20%,
+      color-mix(in srgb, var(--shader-3) 12%, transparent),
+      transparent 70%
+    );
 }
 
 @layer base {

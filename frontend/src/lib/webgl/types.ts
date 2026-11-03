@@ -5,6 +5,7 @@ export interface RenderTarget {
   kind: SurfaceKind;
   seed: number;
   onFallback?: () => void;
+  onFirstFrame?: () => void;
 }
 
 export interface TargetState extends RenderTarget {
@@ -14,4 +15,5 @@ export interface TargetState extends RenderTarget {
   cssWidth: number;
   cssHeight: number;
   context2d: CanvasRenderingContext2D | null;
+  hasDrawn?: boolean;
 }

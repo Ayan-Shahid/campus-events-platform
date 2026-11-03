@@ -157,6 +157,11 @@ export class WebGLRenderer {
       target.canvas.height = height;
     }
     context2d.drawImage(glCanvas, 0, glCanvas.height - height, width, height, 0, 0, width, height);
+
+    if (!target.hasDrawn) {
+      target.hasDrawn = true;
+      target.onFirstFrame?.();
+    }
     return true;
   };
 

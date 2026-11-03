@@ -5,9 +5,11 @@ import { SurfaceCard } from '@/components/visual/surface-card';
 import { Button } from '@/components/ui/button';
 import { SeatMeter, type EventRegistrationStatus } from './seat-meter';
 import { cn } from '@/lib/utils';
-
+import { seedFromString } from '@/lib/webgl/seed';
 export interface EventCardProps extends React.HTMLAttributes<HTMLElement> {
   title: string;
+  eventId?: string;
+
   day: string | number;
   weekday: string;
   taken: number;
@@ -23,6 +25,7 @@ export interface EventCardProps extends React.HTMLAttributes<HTMLElement> {
 }
 
 export function EventCard({
+  eventId,
   title,
   day,
   weekday,
@@ -54,6 +57,7 @@ export function EventCard({
     <SurfaceCard
       surface={effectiveSurface}
       shaderGraphic={shaderGraphic}
+      seed={seedFromString(eventId ?? title)}
       as="article"
       className={cn('p-4', className)}
       {...props}

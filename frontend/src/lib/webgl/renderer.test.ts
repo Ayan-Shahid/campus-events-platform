@@ -256,7 +256,29 @@ describe('WebGLRenderer', () => {
         300,
       );
     });
+    it('calls onFirstFrame once, after the first frame is copied in', () => {
+      const { renderer, register } = setup();
+      const onFirstFrame = vi.fn();
+      const target = register('surface', [300, 200], { onFirstFrame });
 
+      expect(onFirstFrame).not.toHaveBeenCalled();
+      renderer.renderTarget(target.state, 0);
+      expect(target.ctx.drawImage).toHaveBeenCalledTimes(1);
+      expect(onFirstFrame).toHaveBeenCalledTimes(1);
+
+      renderer.renderTarget(target.state, 1);
+      expect(onFirstFrame).toHaveBeenCalledTimes(1);
+    });
+
+    it('does not call onFirstFrame when nothing was drawn', () => {
+      const { renderer, register } = setup();
+      const onFirstFrame = vi.fn();
+      const target = register('surface', [0, 0], { onFirstFrame });
+
+      renderer.renderTarget(target.state, 0);
+
+      expect(onFirstFrame).not.toHaveBeenCalled();
+    });
     it('uses the surface program for cards and the background program for the page', () => {
       const { fake, renderer, register } = setup();
       const card = register('surface');
